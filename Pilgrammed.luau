@@ -65,7 +65,7 @@ LPH_JIT_MAX(function() -- Main Cheat
 	end
 	
 	table.insert(connectionList, runService.RenderStepped:Connect(LPH_NO_VIRTUALIZE(function()
-	    if flags["auto_parry_enabled"] then
+	    if flags["auto_parry_enabled"] then -- why tf doe this work best on 240ms
 		    if math.floor(tick() / tonumber(flags["auto_parry_rate"])) ~= math.floor((tick() - 0.016) / tonumber(flags["auto_parry_rate"])) then
 		        network:send("block")
 		    end
@@ -101,20 +101,20 @@ LPH_NO_VIRTUALIZE(function() -- UI Creation
     local httpService = game:GetService("HttpService")
     
     if not isfolder(folderName) then
-        makefolder(folderName)
-    end
-
-    if not isfolder(folderName .. "pillgrammed") then
-        makefolder(folderName .. "pillgrammed")
-    end
-    
-    if not isfolder(folderName .. "pillgrammed/configs") then
-        makefolder(folderName .. "pillgrammed/configs")
-    end
-    
-    if not isfolder(folderName .. "/cache") then
-        makefolder(folderName .. "/cache")
-    end
+	    makefolder(folderName)
+	end
+	
+	if not isfolder(folderName .. "/pilgrammed") then
+	    makefolder(folderName .. "/pillgrammed")
+	end
+	
+	if not isfolder(folderName .. "/pilgrammed/configs") then
+	    makefolder(folderName .. "/pilgrammed/configs")
+	end
+	
+	if not isfolder(folderName .. "/cache") then
+	    makefolder(folderName .. "/cache")
+	end
     
     local function getCallback(name)
 	    return function(value)
