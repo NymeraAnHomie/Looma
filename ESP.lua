@@ -389,9 +389,14 @@ do -- Initalize
                             end
 
                             do -- Weapons
-                                Weapon.Text = "none"
+                                local WeaponObject = plr.Character:FindFirstChildWhichIsA("Tool", true)
+                                if WeaponsObject and plr.Character then
+	                                Weapon.Text = WeaponObject.Name
+                                else
+	                                Weapon.Text = "none"
+								end
                                 Weapon.Visible = ESP.Drawing.Weapons.Enabled
-                            end                            
+                            end
                         else
                             HideESP();
                         end
