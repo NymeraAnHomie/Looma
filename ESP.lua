@@ -18,7 +18,7 @@ local ESP = {
     Drawing = {
         Chams = {
             Enabled  = false,
-            Thermal = true,
+            Thermal = false,
             FillRGB = Color3.fromRGB(119, 120, 255),
             Fill_Transparency = 100,
             OutlineRGB = Color3.fromRGB(119, 120, 255),
@@ -248,10 +248,10 @@ do -- Initalize
                                 Chams.OutlineColor = ESP.Drawing.Chams.OutlineRGB
                                 do -- Breathe
                                     if ESP.Drawing.Chams.Thermal then
-                                        local breathe_effect = math.atan(math.sin(tick() * 2)) * 2 / math.pi
-                                        Chams.FillTransparency = ESP.Drawing.Chams.Fill_Transparency * breathe_effect * 0.01
-                                        Chams.OutlineTransparency = ESP.Drawing.Chams.Outline_Transparency * breathe_effect * 0.01
-                                    end
+									    local breathe_effect = (math.atan(math.sin(tick() * 2)) * 2 / math.pi + 1) / 2
+									    Chams.FillTransparency = ESP.Drawing.Chams.Fill_Transparency * (0.5 + breathe_effect * 0.5) * 0.01
+									    Chams.OutlineTransparency = ESP.Drawing.Chams.Outline_Transparency * (0.5 + breathe_effect * 0.5) * 0.01
+									end
                                 end
                                 if ESP.Drawing.Chams.VisibleCheck then
                                     Chams.DepthMode = "Occluded"
