@@ -39,13 +39,13 @@ local ESP = {
         },
         Weapons = {
             Enabled = false, WeaponTextRGB = Color3.fromRGB(119, 120, 255),
-            Outlined = false,
+            Outlined = true,
             Gradient = false,
             GradientRGB1 = Color3.fromRGB(255, 255, 255), GradientRGB2 = Color3.fromRGB(119, 120, 255),
         },
         Healthbar = {
             Enabled = false,  
-            HealthText = false, Lerp = false, HealthTextRGB = Color3.fromRGB(119, 120, 255),
+            HealthText = false, Lerp = true, HealthTextRGB = Color3.fromRGB(119, 120, 255),
             Width = 2.5,
             Gradient = false, GradientRGB1 = Color3.fromRGB(200, 0, 0), GradientRGB2 = Color3.fromRGB(60, 60, 125), GradientRGB3 = Color3.fromRGB(119, 120, 255), 
         },
