@@ -389,8 +389,8 @@ do -- Initalize
                             end
 
                             do -- Weapons
-                                local WeaponObject = plr.Character:FindFirstChildWhichIsA("Tool", true)
-                                if WeaponsObject and plr.Character then
+                                local WeaponObject = plr.Character:FindFirstChildWhichIsA("Tool")
+                                if WeaponObject and plr.Character then
 	                                Weapon.Text = WeaponObject.Name
                                 else
 	                                Weapon.Text = "none"
