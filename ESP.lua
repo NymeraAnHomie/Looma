@@ -74,10 +74,7 @@ local ESP = {
 }
 
 -- Services
-local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local CoreGui = cloneref(game:GetService("CoreGui"))
+local Workspace, RunService, Players, CoreGui, Lighting = cloneref(game:GetService("Workspace")), cloneref(game:GetService("RunService")), cloneref(game:GetService("Players")), game:GetService("CoreGui"), cloneref(game:GetService("Lighting"))
 
 -- Def & Vars
 local Euphoria = ESP.Connections;
