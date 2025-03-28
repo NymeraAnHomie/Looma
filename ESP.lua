@@ -1,3 +1,7 @@
+-- Services
+local Workspace, RunService, Players, CoreGui, Lighting = cloneref(game:GetService("Workspace")), cloneref(game:GetService("RunService")), cloneref(game:GetService("Players")), game:GetService("CoreGui"), cloneref(game:GetService("Lighting"))
+
+-- Config
 local ESP = {
     Enabled = true,
     TeamCheck = true, -- opposite value (true = false)
