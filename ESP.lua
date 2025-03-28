@@ -1,5 +1,3 @@
-local Workspace, RunService, Players, CoreGui, Lighting = cloneref(game:GetService("Workspace")), cloneref(game:GetService("RunService")), cloneref(game:GetService("Players")), game:GetService("CoreGui"), cloneref(game:GetService("Lighting"))
-
 local ESP = {
     Enabled = true,
     TeamCheck = true, -- opposite value (true = false)
@@ -74,6 +72,12 @@ local ESP = {
     };
     Fonts = {};
 }
+
+-- Services
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local CoreGui = cloneref(game:GetService("CoreGui"))
 
 -- Def & Vars
 local Euphoria = ESP.Connections;
