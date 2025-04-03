@@ -8,7 +8,6 @@ local folderName = "Looma"
 local callbackList = {}
 local connectionList = {}
 local movementCache = {Time = {}, Position = {}}
-local cham = {}
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/NymeraAnHomie/Library/refs/heads/main/Bitchbot/Source.lua"))()
 local hydroxide = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
@@ -53,8 +52,10 @@ LPH_JIT_MAX(function() -- Main Cheat
 		
 		if flags["movement_infinite_jump"] then
 			client.ArmorStats.Jumps.Value = math.huge
+			client.ArmorStats.DoubleJumpBoost.Value = 0.35
 		else
 			client.ArmorStats.Jumps.Value = 0
+	   	 client.ArmorStats.DoubleJumpBoost.Value = 0
 		end
 		
 		if flags["movement_walk_speed_enabled"] then
@@ -79,6 +80,17 @@ LPH_JIT_MAX(function() -- Main Cheat
 			end
 		end
 	end)))
+	
+	callbackList["Misc Grab all Mirror"] = function()
+		for i,v in pairs(workspace.Mirrors:GetDescendants()) do
+		    if v:IsA("ProximityPrompt") then
+		        localplayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
+		        task.wait(0.35)
+		        fireproximityprompt(v, 1)
+		        task.wait(0.35)
+		    end
+		end
+	end
 	
 	local stillGoing = true
 	task.spawn(LPH_NO_VIRTUALIZE(function()
@@ -105,7 +117,7 @@ LPH_NO_VIRTUALIZE(function() -- UI Creation
 	end
 	
 	if not isfolder(folderName .. "/pilgrammed") then
-	    makefolder(folderName .. "/pillgrammed")
+	    makefolder(folderName .. "/pilgrammed")
 	end
 	
 	if not isfolder(folderName .. "/pilgrammed/configs") then
@@ -135,6 +147,7 @@ LPH_NO_VIRTUALIZE(function() -- UI Creation
 	local autoparry, autododge = main:MultiSection({Sections = {"Auto Parry", "Auto Dodge"}, Zindex = 5, Side = "Left", Size = 300})
 	
 	local movement = misc:Section({Name = "Movement", Zindex = 5, Side = "Left", AutoSize = true})
+	local tweaks = misc:Section({Name = "Tweaks", Zindex = 5, Side = "Right", AutoSize = true})
 	
 	autoparry:Toggle({Name = "Enabled", Flag = "auto_parry_enabled"})
 	autoparry:Toggle({Name = "Ping Based", Flag = "auto_parry_ping_based"})
@@ -145,41 +158,48 @@ LPH_NO_VIRTUALIZE(function() -- UI Creation
 	
 	movement:Toggle({Name = "Infinite Jump", Flag = "movement_infinite_jump"})
 	movement:Toggle({Name = "Walk Speed", Flag = "movement_walk_speed_enabled"})
-	movement:Slider({Name = "Current Speed", Flag = "movement_walk_speed_amount", Suffix = " Studs/Second", Default = 50, Min = 1, Max = 250, Decimals = 0.01})
+	movement:Slider({Name = "Current Speed", Flag = "movement_walk_speed_amount", Suffix = " Studs/Second", Default = 1.5, Min = 1, Max = 5, Decimals = 0.01})
+	
+	tweaks:Button({Name = "Grab all mirrors", Callback = getCallback("Misc Grab all Mirror") })
 	
 	local playerlist = settings:PlayerList({flag = "current_playerlist", path = folderName})
 	local config = settings:Section({Name = "Configuration", Zindex = 5, Side = "Left", AutoSize = true})
 	local cheatsettings = settings:Section({Name = "Interface", Zindex = 5, Side = "Right", AutoSize = true})
 	
 	local function getConfigNames()
-	    local files = listfiles(folderName .. "pillgrammed/configs")
+	    local files = listfiles(folderName .. "/pilgrammed/configs")
 	    local names = {}
 	    for _, file in ipairs(files) do
 	        table.insert(names, file:match("([^/\\]+)$"))
 	    end
 	    return names
 	end
-
+	
 	local config_list = config:List({Name = "Config", Flag = "config_list", Options = getConfigNames()})
 	config:Textbox({Flag = "config_name"})
 	config:Button({Name = "Save", Callback = function()
 	    if flags.config_name and flags.config_name ~= "" then
-	        writefile(folderName .. "pillgrammed/configs/" .. flags.config_name .. ".cfg", library:GetConfig())
+	        library:Notification((isfile(folderName .. "/pilgrammed/configs/" .. flags.config_name .. ".cfg") 
+	        and "Overwrote Config: " or "Created Config: ") .. flags.config_name, 2, library.Accent)
+	        
+	        writefile(folderName .. "/pilgrammed/configs/" .. flags.config_name .. ".cfg", library:GetConfig())
 	        config_list:Refresh(getConfigNames())
 	    else
 	        library:Notification("Config name cannot be empty", 2, library.Accent)
 	    end
 	end})
+	
 	config:Button({Name = "Load", Callback = function()
-	    local file_path = folderName .. "pillgrammed/configs/" .. flags.config_list
+	    local file_path = folderName .. "/pilgrammed/configs/" .. flags.config_list
 	    if isfile(file_path) then
 	        library:LoadConfig(readfile(file_path))
+			library:Notification("Loaded Config" .. flags.config_name, 2, library.Accent)
 	    end
 	end})
 	config:Button({Name = "Refresh", Callback = function()
 	    config_list:Refresh(getConfigNames())
 	end})
-    
+	
     cheatsettings:Colorpicker({Name = "Menu Accent", Flag = "menu_accent", Default = library.Accent, Callback = function(rgb)
 		library:ChangeAccent(rgb)
 	end})
@@ -208,7 +228,6 @@ do if game:GetService("UserInputService").TouchEnabled then
 	Outline.Size = UDim2.new(0, 50, 0, 50)
 	Outline.AutoButtonColor = false
 	Outline.Image = "rbxassetid://10709781919"
-	Outline.ImageColor3 = library.Accent
 	Outline.ImageTransparency = 0
 	Outline.ZIndex = 2
 	Outline.Parent = ScreenGui
@@ -225,13 +244,19 @@ do if game:GetService("UserInputService").TouchEnabled then
 	
 	local Accent = Instance.new("Frame")
 	Accent.Name = "Accent"
-	Accent.BackgroundColor3 = library.Accent
 	Accent.BorderColor3 = Color3.fromRGB(20, 20, 20)
 	Accent.BorderSizePixel = 0
 	Accent.Position = UDim2.new(0, 0, 0, 0)
 	Accent.Size = UDim2.new(1, 0, 0, 1.5)
 	Accent.ZIndex = 1
 	Accent.Parent = Inline
+	
+	task.spawn(function() 
+		while task.wait() do 
+		    Outline.ImageColor3 = library.Accent
+			Accent.BackgroundColor3 = library.Accent 
+		end
+	end)
 	
 	Outline.MouseButton1Click:Connect(function()
 	    library:SetOpen(not library.Open)
